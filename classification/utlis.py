@@ -1,5 +1,8 @@
 import os
 
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
 def write_result_to_csv(result_dir, filename, metrics: list):
     with open(os.path.join(result_dir, f"{filename}.csv"),'a') as f:
         metrics = map(str, metrics) 
@@ -36,5 +39,7 @@ def compute_recall_precsion(preds, targets):
         bear_f1_score,
     )
 
-
-
+def standardize(data: pd.DataFrame):
+#   scaler = StandardScaler()
+    scaler = MinMaxScaler()
+    return pd.DataFrame(scaler.fit_transform(data), columns=data.columns, index=data.index)

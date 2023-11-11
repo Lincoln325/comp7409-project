@@ -1,9 +1,9 @@
 class Config:
     """
     The time frame to be used.
-    short - 7 days
-    mid - 15 days
-    long - 30 days
+    short - 15 days
+    mid - 60 days
+    long - 120 days
 
     example:
     ["long"]
@@ -11,7 +11,7 @@ class Config:
     ["short", "mid", "long"]
     """
 
-    WINDOWS = ["long"]
+    WINDOW = "long"
 
     """
     The features to be used.
@@ -26,8 +26,8 @@ class Config:
     ["o", "c"]
     ["o", "h", "l", "c", "v"]
     """
-    FEATURES = ["o", "h", "l", "c", "v"]
+    FEATURES = ["v"]
 
-    LR = 0.001  # initial learning rate
-    EPOCHS = 100  # maximum training epochs
+    LR = 0.01  # initial learning rate
+    EPOCHS = 1000  # maximum training epochs
     BATCH_SIZE = 32  # training and validation batch size

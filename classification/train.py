@@ -3,16 +3,16 @@ import torch
 from torch import nn
 
 from model import TimeSeriesBinaryClassificationModel
-from datasets import train_dataloader, validation_dataloder
+from datasets import create_dataloader
 
 from config import Config
 from utlis import create_result_dir, write_result_to_csv, compute_recall_precsion
 
-model = TimeSeriesBinaryClassificationModel(Config.WINDOWS, Config.FEATURES)
+model = TimeSeriesBinaryClassificationModel(Config.WINDOW, Config.FEATURES)
 
 model.train()
 optimizer = torch.optim.Adam(model.parameters(), lr=Config.LR)
-scheduler = torch.optim.lr_scheduler.PolynomialLR(optimizer, 50, 0.9)
+scheduler = torch.optim.lr_scheduler.PolynomialLR(optimizer, 100, 0.95)
 criterion = nn.BCEWithLogitsLoss()
 
 result_dir = create_result_dir()
@@ -48,6 +48,8 @@ metrics = [
     "bull_f1_score",
     "bear_f1_score",
 ]
+
+train_dataloader, validation_dataloder = create_dataloader(Config.WINDOW)
 
 for epoch in range(Config.EPOCHS):  # 10 epochs for example
     running_loss = 0.0
