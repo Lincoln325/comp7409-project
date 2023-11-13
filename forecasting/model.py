@@ -81,6 +81,6 @@ class V3(nn.Module):
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_dim).requires_grad_()
         out, hn = self.gru(x, h0.detach())
-        out = self.conv(out[:, [-5,-4,-3,-2,-1], :])
+        out = self.conv(out[:, range(-5,0,1), :])
         out = self.fc(out[:, -1, :])
         return out
