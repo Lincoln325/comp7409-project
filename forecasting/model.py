@@ -54,3 +54,33 @@ class V1(nn.Module):
         out, (hn, cn) = self.lstm(x, (h0.detach(), c0.detach()))
         out = self.fc(out[:, -1, :])
         return out
+    
+class V2(nn.Module):
+    def __init__(self, input_dim=1, hidden_dim=32, num_layers=2, output_dim=1):
+        super(V2, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
+        self.gru = nn.GRU(input_dim, hidden_dim, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_dim, output_dim)
+
+    def forward(self, x):
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_dim).requires_grad_()
+        out, hn = self.gru(x, h0.detach())
+        out = self.fc(out[:, -1, :])
+        return out
+    
+class V3(nn.Module):
+    def __init__(self, input_dim=1, hidden_dim=32, num_layers=2, output_dim=1):
+        super(V3, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
+        self.gru = nn.GRU(input_dim, hidden_dim, num_layers, batch_first=True)
+        self.conv = nn.Conv1d(5, 1, 5, padding="same")
+        self.fc = nn.Linear(hidden_dim, output_dim)
+
+    def forward(self, x):
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_dim).requires_grad_()
+        out, hn = self.gru(x, h0.detach())
+        out = self.conv(out[:, [-5,-4,-3,-2,-1], :])
+        out = self.fc(out[:, -1, :])
+        return out

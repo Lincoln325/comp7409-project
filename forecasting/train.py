@@ -9,7 +9,7 @@ from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 
 from datasets import preprocess, load_data
-from model import V1
+from model import V1, V2, V3
 from config import Config
 from utlis import create_result_dir, write_result_to_csv
 
@@ -147,7 +147,13 @@ def main():
                 data[:, features], data[:, 3].reshape(-1, 1), Config.LOOK_BACK
             )
 
-            model = V1(input_dim=len(features))
+            models = {
+                "V1": V1,
+                "V2": V2,
+                "V3": V3
+            }
+            model = models.get(Config.MODEL)(input_dim=len(features))
+            # model = V1(input_dim=len(features))
             loss_fn = torch.nn.MSELoss()
             optimiser = torch.optim.Adam(model.parameters(), lr=Config.LR)
 
